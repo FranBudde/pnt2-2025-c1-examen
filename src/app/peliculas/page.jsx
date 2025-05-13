@@ -2,16 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import MovieList from './MovieList';
+import Header from '@/componentes/Header';
+import Footer from '@/componentes/Footer';
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  const pageSize = 20;
+
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await fetch(`https://mflixbackend.azurewebsites.net/api/movies?pageSize=10&page=${page}`);
+        const response = await fetch(`https://mflixbackend.azurewebsites.net/api/movies?pageSize=${pageSize}&page=${page}`);
         const data = await response.json();
         setMovies(data);
         setLoading(false);
@@ -25,11 +29,13 @@ export default function Home() {
   }, [page]);
 
   return (
+
     <main className="container mx-auto p-4">      
       {loading ? (
         <p>Cargando películas...</p>
       ) : (
         <>
+        <Header />
           <MovieList movies={movies} />
           <div className="flex justify-center items-center mt-4 space-x-4">
             <button 
@@ -47,8 +53,10 @@ export default function Home() {
               Siguiente →
             </button>
           </div>
+          <Footer />
         </>
       )}
     </main>
+
   );
 }
